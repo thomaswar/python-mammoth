@@ -332,7 +332,7 @@ class _DocumentConverter(documents.element_visitor(args=1)):
         #print ("{}-{}".format(element.style_id, element.style_name))
         if style is not None:
             return style.html_path
-        
+
         if warn_unrecognised and getattr(element, "style_id", None) is not None:
             self._messages.append(results.warning(
                 "Unrecognised {0} style: {1} (Style ID: {2})".format(
