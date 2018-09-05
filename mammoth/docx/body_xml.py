@@ -85,6 +85,8 @@ def _create_reader(numbering, content_types, relationships, styles, docx_file, f
         is_underline = read_boolean_element(properties.find_child("w:u"))
         is_strikethrough = read_boolean_element(properties.find_child("w:strike"))
         is_small_caps = read_boolean_element(properties.find_child("w:smallCaps"))
+        color = properties.find_child_or_null("w:color").attributes.get("w:val")
+        highlight = properties.find_child_or_null("w:highlight").attributes.get("w:val")
         
         def add_complex_field_hyperlink(children):
             hyperlink_href = current_hyperlink_href()
@@ -107,6 +109,8 @@ def _create_reader(numbering, content_types, relationships, styles, docx_file, f
                 is_small_caps=is_small_caps,
                 vertical_alignment=vertical_alignment,
                 font=font,
+                color=color,
+                highlight=highlight,
             ))
     
     def _read_run_style(properties):
@@ -321,7 +325,9 @@ def _create_reader(numbering, content_types, relationships, styles, docx_file, f
     
     def read_child_elements(element):
         return _read_xml_elements(element.children)
-    
+
+    def read_filled(element):
+        return read_child_elements(element)
     
     def pict(element):
         return read_child_elements(element).to_extra()
@@ -480,6 +486,7 @@ def _create_reader(numbering, content_types, relationships, styles, docx_file, f
         "v:shape": read_child_elements,
         "v:textbox": read_child_elements,
         "w:txbxContent": read_child_elements,
+        "v:fill": read_filled,
         "w:pict": pict,
         "w:hyperlink": hyperlink,
         "w:bookmarkStart": bookmark_start,

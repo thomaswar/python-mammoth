@@ -51,6 +51,8 @@ class Run(HasChildren):
     is_small_caps = cobble.field()
     vertical_alignment = cobble.field()
     font = cobble.field()
+    color = cobble.field()
+    highlight = cobble.field()
 
 @cobble.data
 class Text(Element):
@@ -124,6 +126,8 @@ def run(
     is_small_caps=None,
     vertical_alignment=None,
     font=None,
+    color=None,
+    highlight=None,
 ):
     if vertical_alignment is None:
         vertical_alignment = VerticalAlignment.baseline
@@ -138,6 +142,8 @@ def run(
         is_small_caps=bool(is_small_caps),
         vertical_alignment=vertical_alignment,
         font=font,
+        color=color,
+        highlight=highlight,
     )
 
 class VerticalAlignment(object):

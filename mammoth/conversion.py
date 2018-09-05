@@ -9,7 +9,7 @@ import cobble
 from . import documents, results, html_paths, images, writers, html
 from .docx.files import InvalidFileReferenceError
 from .lists import find_index
-
+from .conv.csscolors import CssColors
 
 def convert_document_element_to_html(element,
         style_map=None,
@@ -105,6 +105,12 @@ class _DocumentConverter(documents.element_visitor(args=1)):
         html_path = self._find_html_path_for_paragraph(paragraph)
         return html_path.wrap(children)
 
+    def _set_colors(self,run,paths):
+        csscol = CssColors(run=run)
+        s = str(csscol)
+        if s:
+            new_path = html_paths.element("div", [s])
+            paths.append(new_path)
 
     def visit_run(self, run, context):
         nodes = lambda: self._visit_all(run.children, context)
@@ -123,6 +129,9 @@ class _DocumentConverter(documents.element_visitor(args=1)):
             paths.append(self._find_style_for_run_property("italic", default="em"))
         if run.is_bold:
             paths.append(self._find_style_for_run_property("bold", default="strong"))
+
+        self._set_colors(run,paths)
+
         paths.append(self._find_html_path_for_run(run))
 
         for path in paths:
@@ -279,6 +288,7 @@ class _DocumentConverter(documents.element_visitor(args=1)):
         )
         
         return html_path.wrap(nodes)
+
     
     def visit_comment(self, referenced_comment, context):
         label, comment = referenced_comment
@@ -319,6 +329,7 @@ class _DocumentConverter(documents.element_visitor(args=1)):
     
     def _find_html_path(self, element, element_type, default, warn_unrecognised=False):
         style = self._find_style(element, element_type)
+        #print ("{}-{}".format(element.style_id, element.style_name))
         if style is not None:
             return style.html_path
         

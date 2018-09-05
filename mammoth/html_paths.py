@@ -48,6 +48,15 @@ class HtmlPathElement(object):
         element = html.Element(self.tag, nodes)
         return [element]
 
+    def add_class_attribute(self, cls):
+        try:
+            my_cls = self.tag.attributes["class"].split(" ")
+        except KeyError:
+            my_cls = []
+        my_cls.extend(cls.split(" "))
+        new_cls = ' '.join(my_cls)
+        self.tag.attributes["class"] = new_cls
+
 empty = path([])
 
 
