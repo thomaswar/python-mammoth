@@ -110,6 +110,7 @@ class _DocumentConverter(documents.element_visitor(args=1)):
         s = str(csscol)
         if s:
             new_path = html_paths.element("div", [s])
+            new_path.add_class_attribute("mcolored")
             paths.append(new_path)
 
     def visit_run(self, run, context):
