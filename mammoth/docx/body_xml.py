@@ -157,16 +157,18 @@ def _create_reader(numbering, content_types, relationships, styles, docx_file, f
             complex_field_stack.append(complex_fields.unknown)
             del current_instr_text[:]
         elif fld_char_type == "end":
-            complex_field_stack.pop()
+            if complex_field_stack:
+                complex_field_stack.pop()
         elif fld_char_type == "separate":
-            instr_text = "".join(current_instr_text)
-            hyperlink_href = parse_hyperlink_field_code(instr_text)
-            if hyperlink_href is None:
-                complex_field = complex_fields.unknown
-            else:
-                complex_field = complex_fields.hyperlink(hyperlink_href)
-            complex_field_stack.pop()
-            complex_field_stack.append(complex_field)
+            if complex_field_stack:
+                instr_text = "".join(current_instr_text)
+                hyperlink_href = parse_hyperlink_field_code(instr_text)
+                if hyperlink_href is None:
+                    complex_field = complex_fields.unknown
+                else:
+                    complex_field = complex_fields.hyperlink(hyperlink_href)
+                complex_field_stack.pop()
+                complex_field_stack.append(complex_field)
         return _empty_result
     
     def parse_hyperlink_field_code(instr_text):
