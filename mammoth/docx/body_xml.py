@@ -500,7 +500,8 @@ def _create_reader(numbering, content_types, relationships, styles, docx_file, f
         "w:endnoteReference": note_reference_reader("endnote"),
         "w:commentReference": read_comment_reference,
         "mc:AlternateContent": alternate_content,
-        "w:sdt": read_sdt
+        "w:sdt": read_sdt,
+        "v:stroke": read_child_elements,
     }
     
     def read(element):
