@@ -109,7 +109,7 @@ class _DocumentConverter(documents.element_visitor(args=1)):
         csscol = CssColors(run=run)
         s = str(csscol)
         if s:
-            new_path = html_paths.element("div", [s])
+            new_path = html_paths.element("span", [s])
             new_path.add_class_attribute("mcolored")
             paths.append(new_path)
 
@@ -139,8 +139,7 @@ class _DocumentConverter(documents.element_visitor(args=1)):
             nodes = partial(path.wrap, nodes)
 
         return nodes()
-    
-    
+
     def _find_style_for_run_property(self, element_type, default=None):
         style = self._find_style(None, element_type)
         if style is not None:
